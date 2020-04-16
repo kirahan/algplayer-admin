@@ -1,0 +1,129 @@
+<template>
+  <v-app v-resize="onresize">
+    <v-navigation-drawer
+      v-model="drawer"
+      class="teal lighten-1"
+      width="500"
+      dark
+      right
+      app
+      disable-resize-watcher
+    >
+      <v-list nav class="py-2">
+        <v-list-item>
+          <v-list-item-avatar>
+            <img src="https://randomuser.me/api/portraits/men/81.jpg" />
+          </v-list-item-avatar>
+
+          <v-list-item-content>
+            <v-list-item-title class="title">
+              {{$store.state.auth.user.username}}
+              <v-btn color="purple" right absolute small>退出</v-btn>
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+
+    <v-app-bar app clipped color="purple" dark>
+      <v-toolbar-title style="cursor:pointer" @click="gotoMain()"
+        >AlgDb.Player</v-toolbar-title
+      >
+      <v-autocomplete
+        v-model="select"
+        :loading="loading"
+        :items="items"
+        :search-input.sync="search"
+        clearable
+        cache-items
+        class="mx-4"
+        flat
+        hide-no-data
+        hide-details
+        label="search a case"
+        solo-inverted
+      ></v-autocomplete>
+
+      <v-btn icon color=""><v-icon>mdi-fullscreen</v-icon></v-btn>
+      <v-btn icon color="">
+        <v-badge overlap color="red" content="6">
+          <v-icon>mdi-bell</v-icon>
+        </v-badge>
+      </v-btn>
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+    </v-app-bar>
+
+    <v-content app fluid>
+      <nuxt-child></nuxt-child>
+    </v-content>
+
+    <v-bottom-navigation
+      :value="activeBtn"
+      grow
+      app
+      color="teal"
+      v-if="usephoneLayout"
+    >
+      <v-btn>
+        <span>Recents</span>
+        <v-icon>mdi-history</v-icon>
+      </v-btn>
+
+      <v-btn>
+        <span>Favorites</span>
+        <v-icon>mdi-heart</v-icon>
+      </v-btn>
+
+      <v-btn>
+        <span>Nearby</span>
+        <v-icon>mdi-map-marker</v-icon>
+      </v-btn>
+    </v-bottom-navigation>
+
+    <v-footer app v-if="!usephoneLayout">
+      <span>&copy; 2020</span>
+      <v-btn right text absolute :href="githuburl" target="_blank">
+        <v-icon>mdi-github</v-icon>
+      </v-btn>
+    </v-footer>
+  </v-app>
+</template>
+
+<script lang="ts">
+import Vue from "vue";
+import { Component, Prop, Ref, Provide, Watch } from "vue-property-decorator";
+
+@Component({ name: "App", components: {} })
+export default class App extends Vue {
+  constructor() {
+    super();
+  }
+
+  // -1 means cycle model
+  sponsorindex: number = -1;
+  showcubesample: boolean = false;
+
+  activeBtn: number = 1;
+  drawer: boolean = false;
+  select: boolean = false;
+  items = [];
+  search = null;
+  loading: boolean = false;
+  config: boolean = true;
+  show2dOr3d: boolean = false;
+  usephoneLayout: boolean = false;
+  windowSize = { x: 0, y: 0 };
+  githuburl: string = "https://github.com/kirahan/vue-ts-algdb-player";
+
+  gotoMain() {
+    this.$router.push("/");
+  }
+  onresize() {
+    this.windowSize = { x: window.innerWidth, y: window.innerHeight };
+    this.usephoneLayout = this.windowSize.x < 600 ? true : false;
+  }
+  created() {}
+
+  mounted() {}
+}
+</script>
