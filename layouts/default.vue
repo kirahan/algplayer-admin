@@ -53,12 +53,17 @@
         </v-btn>
         <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       </div>
-      <v-btn v-else icon >登录<v-icon>mdi-login</v-icon></v-btn>
+      <v-btn v-else icon @click="isLoginShow=!isLoginShow">登录<v-icon>mdi-login</v-icon></v-btn>
       
     </v-app-bar>
 
+
+
+
     <v-content app fluid>
+      <Login v-if="isLoginShow"></Login>
       <nuxt-child></nuxt-child>
+      <GlobalMessage></GlobalMessage>
     </v-content>
 
     <v-bottom-navigation
@@ -67,7 +72,7 @@
       app
       color="teal"
       v-if="usephoneLayout"
-    >
+      >
       <v-btn>
         <span>Recents</span>
         <v-icon>mdi-history</v-icon>
@@ -96,8 +101,10 @@
 <script lang="ts">
 import Vue from "vue";
 import { Component, Prop, Ref, Provide, Watch } from "vue-property-decorator";
+import Login from '../pages/login.vue'
+import GlobalMessage from '../components/globalMessage.vue'
 
-@Component({ name: "App", components: {} })
+@Component({ name: "App", components: {Login, GlobalMessage} })
 export default class App extends Vue {
   constructor() {
     super();
@@ -120,6 +127,8 @@ export default class App extends Vue {
   githuburl: string = "https://github.com/kirahan/vue-ts-algdb-player";
 
   isFullscreen: boolean = false
+  isLoginShow: boolean = false
+
 
   gotoMain() {
     this.$router.push("/");

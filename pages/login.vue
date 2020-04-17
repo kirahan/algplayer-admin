@@ -58,11 +58,15 @@
 
 <script lang="ts">
 import { Component, mixins, Vue, Watch, Ref } from "nuxt-property-decorator";
-
+import { ServerResponse, MessageConfig } from "../components/globalMessage.vue";
 @Component({
   name: "Login"
 })
 export default class Login extends Vue {
+  constructor() {
+    super();
+  }
+
   @Ref("form") submit: any;
 
   logo = require("../assets/logo.png");
@@ -77,17 +81,40 @@ export default class Login extends Vue {
   async check() {
     const isValidateOK = this.submit.validate();
     if (isValidateOK) {
-      await this.$auth.loginWith("local", {
-        data: {
-          username: this.username,
-          password: this.password
+      try {
+        const user = await this.$auth.loginWith("local", {
+          data: {
+            username: this.username,
+            password: this.password
+          }
+        });
+        const config: MessageConfig = {
+          template: 'success-login',
+          text: '登录成功'
         }
-      });
-      //   const user = await this.$axios.$post("/auth/login", {
+        throw config
+      } catch (err) {
+        const response = err.response.data as ServerResponse;
+        const message = response.message;
+        const statusCode = response.statusCode;
+        const errortype = response.error;
+        if (statusCode === 400) {
+          const config: MessageConfig = {
+            template: "error-login",
+            text: message
+          };
+          throw config
+        }
+      }
+      // try {
+      //   const user = await this.$axios.post("/auth/login", {
       //     username: this.username,
       //     password: this.password
       //   });
-      //   console.log(user)
+      //   console.log(user);
+      // } catch (err) {
+      //   console.log(err);
+      // }
     }
   }
 }
