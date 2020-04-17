@@ -17,8 +17,8 @@
 
           <v-list-item-content>
             <v-list-item-title class="title">
-              <!-- {{$store.state.auth.user.username}} -->
-              <v-btn color="purple" right absolute small>退出</v-btn>
+              {{username}}
+              <v-btn color="purple" right absolute small  @click="logout">退出</v-btn>
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
@@ -44,24 +44,26 @@
         solo-inverted
       ></v-autocomplete>
 
-      <v-btn icon @click="onClickFullscreen"><v-icon>{{isFullscreen? 'mdi-fullscreen-exit': 'mdi-fullscreen'}}</v-icon></v-btn>
+      <v-btn icon @click="onClickFullscreen"
+        ><v-icon>{{
+          isFullscreen ? "mdi-fullscreen-exit" : "mdi-fullscreen"
+        }}</v-icon></v-btn
+      >
       <div v-if="$store.state.auth.loggedIn">
-          <v-btn icon color="">
+        <v-btn icon color="">
           <v-badge overlap color="red" content="6">
             <v-icon>mdi-bell</v-icon>
           </v-badge>
         </v-btn>
         <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       </div>
-      <v-btn v-else icon @click="isLoginShow=!isLoginShow">登录<v-icon>mdi-login</v-icon></v-btn>
-      
+      <v-btn v-else icon @click="isLoginShow = !isLoginShow"
+        >登录<v-icon>mdi-login</v-icon></v-btn
+      >
     </v-app-bar>
 
-
-
-
     <v-content app fluid>
-      <Login v-if="isLoginShow"></Login>
+      <Login v-if="isLoginShow && !$store.state.auth.loggedIn"></Login>
       <nuxt-child></nuxt-child>
       <GlobalMessage></GlobalMessage>
     </v-content>
@@ -72,7 +74,7 @@
       app
       color="teal"
       v-if="usephoneLayout"
-      >
+    >
       <v-btn>
         <span>Recents</span>
         <v-icon>mdi-history</v-icon>
@@ -101,11 +103,12 @@
 <script lang="ts">
 import Vue from "vue";
 import { Component, Prop, Ref, Provide, Watch } from "vue-property-decorator";
-import Login from '../pages/login.vue'
-import GlobalMessage from '../components/globalMessage.vue'
+import Login from "../pages/login.vue";
+import GlobalMessage from "../components/globalMessage.vue";
 
-@Component({ name: "App", components: {Login, GlobalMessage} })
+@Component({ name: "App", components: { Login, GlobalMessage } })
 export default class App extends Vue {
+  // eslint-disable-next-line no-useless-constructor
   constructor() {
     super();
   }
@@ -126,48 +129,64 @@ export default class App extends Vue {
   windowSize = { x: 0, y: 0 };
   githuburl: string = "https://github.com/kirahan/vue-ts-algdb-player";
 
-  isFullscreen: boolean = false
-  isLoginShow: boolean = false
 
+  isFullscreen: boolean = false;
+  isLoginShow: boolean = false;
+
+  get username(){
+    try{
+      const username = this.$store.state.auth.user.username
+      return username
+    }
+    catch{
+      return ''
+    }
+  }
+
+  logout(){
+    this.drawer = false
+    this.$auth.logout()
+  }
 
   gotoMain() {
     this.$router.push("/");
   }
+
   onresize() {
     this.windowSize = { x: window.innerWidth, y: window.innerHeight };
-    this.usephoneLayout = this.windowSize.x < 600 ? true : false;
+    this.usephoneLayout = this.windowSize.x < 600;
   }
 
   onClickFullscreen() {
-        if (this.isFullscreen) {
-          if (document.exitFullscreen) {
-            document.exitFullscreen();
-          } else if (document.mozExitFullscreen) {
-            document.mozExitFullscreen();
-          } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-          } else if (document.msExitFullscreen) {
-            document.msExitFullscreen();
-          }
-          this.isFullscreen = false;
-        } else {
-          if (document.documentElement.requestFullscreen) {
-            document.documentElement.requestFullscreen();
-          } else if (document.documentElement.mozRequestFullScreen) {
-            document.documentElement.mozRequestFullScreen();
-          } else if (document.documentElement.webkitRequestFullscreen) {
-            document.documentElement.webkitRequestFullscreen();
-          } else if (document.documentElement.msRequestFullscreen) {
-            document.documentElement.msRequestFullscreen();
-          }
-          this.isFullscreen = true;
-        } 
+    if (this.isFullscreen) {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.mozExitFullscreen) {
+        document.mozExitFullscreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+      }
+      this.isFullscreen = false;
+    } else {
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen();
+      } else if (document.documentElement.mozRequestFullScreen) {
+        document.documentElement.mozRequestFullScreen();
+      } else if (document.documentElement.webkitRequestFullscreen) {
+        document.documentElement.webkitRequestFullscreen();
+      } else if (document.documentElement.msRequestFullscreen) {
+        document.documentElement.msRequestFullscreen();
+      }
+      this.isFullscreen = true;
     }
+  }
 
   created() {}
 
   mounted() {
-    console.log(this.$store.state)
+    console.log(this.$store.state);
   }
 }
 </script>

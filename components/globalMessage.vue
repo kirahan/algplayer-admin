@@ -46,10 +46,8 @@ export interface MessageConfig {
 export default class GlobalMessage extends Vue {
   constructor() {
     super();
-    Vue.config.errorHandler = (error: any, vm: any) => {
-      const config = error as MessageConfig
-      this.setconfig(config)
-    };
+    // 注册全局的事件通讯管道
+    Vue.prototype.$MessageChanel = new Vue()
   }
 
   snackbar: boolean = false;
@@ -66,7 +64,7 @@ export default class GlobalMessage extends Vue {
           this.y = 'bottom'
           this.mode = ''
           this.timeout = 6000
-          this.color = 'red'
+          this.color = 'error'
           this.text = config.text
           this.snackbar = true
       }else if(config.template==='success-login'){
@@ -74,10 +72,15 @@ export default class GlobalMessage extends Vue {
           this.y = 'bottom'
           this.mode = ''
           this.timeout = 6000
-          this.color = 'success'
+          this.color = 'info'
           this.text = config.text
           this.snackbar = true
       }
+  }
+
+  mounted(){
+    //   添加监听函数
+    this.$MessageChanel.$on('globalmessage', (config)=> this.setconfig(config))
   }
 }
 </script>

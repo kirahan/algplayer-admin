@@ -88,22 +88,22 @@ export default class Login extends Vue {
             password: this.password
           }
         });
-        const config: MessageConfig = {
+        const msgSuccess: MessageConfig = {
           template: 'success-login',
           text: '登录成功'
         }
-        throw config
+        this.$MessageChanel.$emit('globalmessage', msgSuccess)
       } catch (err) {
         const response = err.response.data as ServerResponse;
         const message = response.message;
         const statusCode = response.statusCode;
         const errortype = response.error;
         if (statusCode === 400) {
-          const config: MessageConfig = {
+          const msgError: MessageConfig = {
             template: "error-login",
             text: message
           };
-          throw config
+          this.$MessageChanel.$emit('globalmessage', msgError)
         }
       }
       // try {
