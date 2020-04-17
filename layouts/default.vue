@@ -17,7 +17,7 @@
 
           <v-list-item-content>
             <v-list-item-title class="title">
-              {{$store.state.auth.user.username}}
+              <!-- {{$store.state.auth.user.username}} -->
               <v-btn color="purple" right absolute small>退出</v-btn>
             </v-list-item-title>
           </v-list-item-content>
@@ -44,13 +44,17 @@
         solo-inverted
       ></v-autocomplete>
 
-      <v-btn icon color=""><v-icon>mdi-fullscreen</v-icon></v-btn>
-      <v-btn icon color="">
-        <v-badge overlap color="red" content="6">
-          <v-icon>mdi-bell</v-icon>
-        </v-badge>
-      </v-btn>
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+      <v-btn icon @click="onClickFullscreen"><v-icon>{{isFullscreen? 'mdi-fullscreen-exit': 'mdi-fullscreen'}}</v-icon></v-btn>
+      <div v-if="$store.state.auth.loggedIn">
+          <v-btn icon color="">
+          <v-badge overlap color="red" content="6">
+            <v-icon>mdi-bell</v-icon>
+          </v-badge>
+        </v-btn>
+        <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+      </div>
+      <v-btn v-else icon >登录<v-icon>mdi-login</v-icon></v-btn>
+      
     </v-app-bar>
 
     <v-content app fluid>
@@ -115,6 +119,8 @@ export default class App extends Vue {
   windowSize = { x: 0, y: 0 };
   githuburl: string = "https://github.com/kirahan/vue-ts-algdb-player";
 
+  isFullscreen: boolean = false
+
   gotoMain() {
     this.$router.push("/");
   }
@@ -122,8 +128,37 @@ export default class App extends Vue {
     this.windowSize = { x: window.innerWidth, y: window.innerHeight };
     this.usephoneLayout = this.windowSize.x < 600 ? true : false;
   }
+
+  onClickFullscreen() {
+        if (this.isFullscreen) {
+          if (document.exitFullscreen) {
+            document.exitFullscreen();
+          } else if (document.mozExitFullscreen) {
+            document.mozExitFullscreen();
+          } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+          } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+          }
+          this.isFullscreen = false;
+        } else {
+          if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen();
+          } else if (document.documentElement.mozRequestFullScreen) {
+            document.documentElement.mozRequestFullScreen();
+          } else if (document.documentElement.webkitRequestFullscreen) {
+            document.documentElement.webkitRequestFullscreen();
+          } else if (document.documentElement.msRequestFullscreen) {
+            document.documentElement.msRequestFullscreen();
+          }
+          this.isFullscreen = true;
+        } 
+    }
+
   created() {}
 
-  mounted() {}
+  mounted() {
+    console.log(this.$store.state)
+  }
 }
 </script>
