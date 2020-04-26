@@ -2,7 +2,6 @@
 
 <template>
   <v-layout column justify-center align-center>
-    <p>fhjdsfklds</p>
   </v-layout>
 </template>
 

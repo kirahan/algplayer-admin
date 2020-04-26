@@ -23,6 +23,8 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
+
+      <Navigation :isopend="drawer"></Navigation>
     </v-navigation-drawer>
 
     <v-app-bar app clipped color="purple" dark>
@@ -51,7 +53,7 @@
       >
       <div v-if="$store.state.auth.loggedIn">
         <v-btn icon color="">
-          <v-badge overlap color="red" content="6">
+          <v-badge overlap color="red" content="">
             <v-icon>mdi-bell</v-icon>
           </v-badge>
         </v-btn>
@@ -74,7 +76,7 @@
       app
       color="teal"
       v-if="usephoneLayout"
-    >
+      >
       <v-btn>
         <span>Recents</span>
         <v-icon>mdi-history</v-icon>
@@ -105,8 +107,10 @@ import Vue from "vue";
 import { Component, Prop, Ref, Provide, Watch } from "vue-property-decorator";
 import Login from "../pages/login.vue";
 import GlobalMessage from "../components/globalMessage.vue";
+import Navigation from '../components/navigation.vue'
 
-@Component({ name: "App", components: { Login, GlobalMessage } })
+
+@Component({ name: "App", components: { Login, GlobalMessage, Navigation} })
 export default class App extends Vue {
   // eslint-disable-next-line no-useless-constructor
   constructor() {
@@ -124,11 +128,10 @@ export default class App extends Vue {
   search = null;
   loading: boolean = false;
   config: boolean = true;
-  show2dOr3d: boolean = false;
+
   usephoneLayout: boolean = false;
   windowSize = { x: 0, y: 0 };
   githuburl: string = "https://github.com/kirahan/vue-ts-algdb-player";
-
 
   isFullscreen: boolean = false;
   isLoginShow: boolean = false;
@@ -142,6 +145,7 @@ export default class App extends Vue {
       return ''
     }
   }
+
 
   logout(){
     this.drawer = false
@@ -187,6 +191,7 @@ export default class App extends Vue {
 
   mounted() {
     console.log(this.$store.state);
+    console.log(this.$sampleRender)
   }
 }
 </script>
