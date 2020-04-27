@@ -355,7 +355,7 @@ export default class Account extends Vue {
   message: string = "";
   timeout = 2000;
 
-  bottomlayerdata: object
+  bottomlayerdata: object;
 
   @Emit("setsponsorindex")
   setSponsorIndex(value) {
@@ -413,33 +413,36 @@ export default class Account extends Vue {
   }
 
   mounted() {
-    let bottomlayer = window.localStorage.getItem("cubestack-bottomlayer")
-    for(let key in this.bottomlist){
-      if(this.bottomlist[key].face == bottomlayer){
-        this.bottom = this.bottomlist[key].name
+    let bottomlayer = window.localStorage.getItem("cubestack-bottomlayer");
+    for (let key in this.bottomlist) {
+      if (this.bottomlist[key].face == bottomlayer) {
+        this.bottom = this.bottomlist[key].name;
       }
     }
     this.resize();
     this.getlocalstoragecolors();
   }
   setbottomlayer(layer) {
-    this.$sampleRender.setbottom(layer.face)
+    this.$sampleRender.setbottom(layer.face);
     this.bottom = layer.name;
-    this.bottomlayerdata = layer
+    this.bottomlayerdata = layer;
   }
 
-  saveBottomLayer(){
-    window.localStorage.setItem("cubestack-bottomlayer", this.bottomlayerdata.face);
-    this.$sampleRender.loadCubeConfig()
-    this.snackbar = true
-    this.message = `将魔方底色设置为${this.bottomlayerdata.name}色`
+  saveBottomLayer() {
+    window.localStorage.setItem(
+      "cubestack-bottomlayer",
+      this.bottomlayerdata.face
+    );
+    this.$sampleRender.loadCubeConfig();
+    this.snackbar = true;
+    this.message = `将魔方底色设置为${this.bottomlayerdata.name}色`;
   }
 
-  resetBottomLayer(){
-    window.localStorage.setItem("cubestack-bottomlayer", 'D');
-    this.$sampleRender.loadCubeConfig()
-    this.snackbar = true
-    this.message = `重置成功`
+  resetBottomLayer() {
+    window.localStorage.setItem("cubestack-bottomlayer", "D");
+    this.$sampleRender.loadCubeConfig();
+    this.snackbar = true;
+    this.message = `重置成功`;
   }
 
   opencolorselect(index) {
