@@ -18,7 +18,7 @@
     "@nuxtjs/dotenv": "^1.4.0",
     "@nuxtjs/pwa": "^3.0.0-0",
     "cubestack": "^0.4.4",
-    "gsap": "^3.2.6",
+    "gsap": "^3.6.0",
     "nuxt": "^2.12.2",
     "nuxt-property-decorator": "^2.5.1",
     "three": "^0.115.0",
