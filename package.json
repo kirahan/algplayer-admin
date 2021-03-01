@@ -21,7 +21,7 @@
     "gsap": "^3.2.6",
     "nuxt": "^2.12.2",
     "nuxt-property-decorator": "^2.5.1",
-    "three": "^0.115.0",
+    "three": "^0.125.0",
     "vue-property-decorator": "^8.4.1",
     "vuelidate": "^0.7.5"
   },
